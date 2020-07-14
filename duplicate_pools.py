@@ -45,7 +45,7 @@ class DuplicatePools(object):
 					new[item_a].add(item_b)
 					new[item_a].add(item_a)
 		
-		self.pools = [set({item}).union(new[item]) for item in new]
+		self.pools = list(map(set, new.values()))
 		
 		self.clean()
 
