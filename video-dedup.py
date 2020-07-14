@@ -37,7 +37,6 @@ if args.duration_threshold:
 	logger.excluding_by_duration(args.duration_threshold)
 	pools.expand(lambda v : v.duration(), lambda a, b : abs(a-b) <= args.duration_threshold)
 	logger.found_n_videos(len(pools))
-
 else:
 	logger.warn_duration_threshold()
 
