@@ -1,6 +1,12 @@
 from functools import *
 from tqdm import tqdm
 from colors import colors as color
+from operator import *
+
+# return all (a, b) pairs in i, such that criteria(a, b) == True
+def pairings(i, criteria):
+	permutations = [set((a, b) for a in i if criteria(a, b)) for b in i]
+	return reduce(set.union, permutations)
 
 class DuplicatePools(object):
 	def __init__(self, items):
@@ -13,43 +19,45 @@ class DuplicatePools(object):
 			for item in pool:
 				print(f'    {color["yellow"]}{item}{color["default"]}')
 		print(f'{color["dgray"]}{"-"*hbar_width}{color["default"]}')
+	
+	def items(self):
+		return reduce(set.union, self.pools)
 
-	def expand(self, fingerprint, compare):
+	def fingerprint(self, func):
 		fingerprints = {}
-		for item in tqdm(reduce(set.union, self.pools)):
+		for item in tqdm(self.items()):
 			try:
-				fingerprints[item] = fingerprint(item)
+				fingerprints[item] = func(item)
 			except:
 				fingerprints[item] = None
+		return fingerprints
+
+	def expand(self, fingerprint, compare):
+		fingerprints = self.fingerprint(fingerprint)
 		
 		new = {}
-		for pool in self.pools:
-			for item_a in pool:
-				for item_b in pool:
-					if item_a == item_b:
-						continue
-					new[item_a] = new.get(item_a, set({item_a}))
-
-					f_a, f_b = fingerprints[item_a], fingerprints[item_b]
-					if f_a is not None and f_b is not None:
-						if compare(f_a, f_b):
-							new[item_a].add(item_b)
-							new[item_a].add(item_a)
-			
+		for pool in self.pools:			
+			for item_a, item_b in pairings(pool, ne):
+				new[item_a] = new.get(item_a, set({item_a}))
+				f_a, f_b = fingerprints[item_a], fingerprints[item_b]
+				if f_a is None or f_b is None:
+					continue
+				if compare(f_a, f_b):
+					new[item_a].add(item_b)
+					new[item_a].add(item_a)
+		
 		self.pools = [set({item}).union(new[item]) for item in new]
 		
 		self.clean()
-		self.pools = self.pools[::-1]
-		self.clean()
 
 	def clean(self):
-		for index_a, pool_a in enumerate(self.pools):
-			for index_b, pool_b in enumerate(self.pools):
-				if index_a < index_b:
-					if pool_a.issubset(pool_b):
-						self.pools[index_a] = set()
+		# delete subpools
+		for a, b in pairings((range(len(self.pools))), ne):			
+			if self.pools[a].issubset(self.pools[b]):
+				self.pools[a] = set()
 
-		self.pools = [pool for pool in self.pools if len(pool) > 1]
-
+		# remove empty or single-item pools
+		self.pools = [p for p in self.pools if len(p) > 1]
+	
 	def __len__(self):
-		return len(reduce(set.union, self.pools))
+		return len(self.items())
