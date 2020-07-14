@@ -12,6 +12,7 @@ import uuid
 import datetime
 from tqdm import tqdm
 import argparse
+import random
 
 
 parser = argparse.ArgumentParser(description='Find and remove duplicate videos')
@@ -136,7 +137,7 @@ class DuplicatePools(object):
 		for pool in self.pools:
 			print(f'{color["dgray"]}{"-"*hbar_width}{color["default"]}')
 			for item in pool:
-				print(f'    {color["yellow"]}{item}')
+				print(f'    {color["yellow"]}{item}{color["default"]}')
 		print(f'{color["dgray"]}{"-"*hbar_width}{color["default"]}')
 
 	def expand(self, fingerprint, compare):
