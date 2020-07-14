@@ -10,7 +10,7 @@ First, we give `video-dedup.py` a list of directories in which it will look for 
 
 This set of videos is then broken up into smaller sets. Each of these sets contains the paths of two or more files which are potentially the same video.
 
-'video-dedup` can never be sure if two videos are *actually* duplicates, so it relies on a few heuristics to exclude videos that are definitely *not* duplicates. Once enough of these heuristics have been applied, we can be pretty sure that the remaining un-excluded videos actually are duplicates. It usually works quite well.
+`video-dedup` can never be sure if two videos are *actually* duplicates, so it relies on a few heuristics to exclude videos that are definitely *not* duplicates. Once enough of these heuristics have been applied, we can be pretty sure that the remaining un-excluded videos actually are duplicates. It usually works quite well.
 
 ## Screenshot
  ![](https://i.ibb.co/82LsW8n/2020-07-14-09-13-04.png)
