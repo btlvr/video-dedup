@@ -21,5 +21,4 @@ colors = {
 }
 
 if args.no_color:
-	for c in colors:
-		colors[c] = ''
+	colors = dict.fromkeys(colors, '')
