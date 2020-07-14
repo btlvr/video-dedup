@@ -2,6 +2,8 @@ from functools import *
 from tqdm import tqdm
 from colors import colors as color
 from operator import *
+from collections import defaultdict
+from contextlib import suppress
 
 # return all (a, b) pairs in i, such that criteria(a, b) == True
 def pairings(i, criteria):
@@ -19,17 +21,14 @@ class DuplicatePools(object):
 			for item in pool:
 				print(f'    {color["yellow"]}{item}{color["default"]}')
 		print(f'{color["dgray"]}{"-"*hbar_width}{color["default"]}')
-	
+
 	def items(self):
-		return reduce(set.union, self.pools)
+		return reduce(set.union, self.pools) 
 
 	def fingerprint(self, func):
-		fingerprints = {}
+		fingerprints = defaultdict(lambda : None)
 		for item in tqdm(self.items()):
-			try:
-				fingerprints[item] = func(item)
-			except:
-				fingerprints[item] = None
+			with suppress(Exception): fingerprints[item] = func(item)
 		return fingerprints
 
 	def expand(self, fingerprint, compare):
