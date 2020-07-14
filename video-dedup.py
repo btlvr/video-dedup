@@ -10,7 +10,7 @@ from duplicate_pools import DuplicatePools
 import logger
 from args import args
 
-	
+
 def list_videos(dir):
 	for dirpath, subdirs, Videos in os.walk(dir):
 		for Video in Videos:
