@@ -4,7 +4,6 @@ from functools import *
 import os
 import time
 import numpy
-from tqdm import tqdm
 
 from video import Video
 from duplicate_pools import DuplicatePools

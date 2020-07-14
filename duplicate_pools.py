@@ -1,9 +1,5 @@
 from functools import *
-import os
-import time
-import numpy
 from tqdm import tqdm
-import argparse
 from colors import color
 
 class DuplicatePools(object):
