@@ -22,7 +22,7 @@ parser.add_argument(
 	dest='no_color',
 	action='store_const',
 	const=True, default=False,
-	help='disable color output'
+	help='Disable color output'
 )
 
 parser.add_argument(
@@ -35,7 +35,14 @@ parser.add_argument(
 parser.add_argument(
 	'dirs',
 	nargs='+',
-	help='directories'
+	help='Directories'
+)
+
+parser.add_argument(
+    "--hash-threshold",
+    type=int,
+    default=10,
+    help="How different two frame hashes must be in order to be considred unique"
 )
 
 args = parser.parse_args()
@@ -195,8 +202,6 @@ for folder in args.dirs:
 pools = DuplicatePools(videos)
 
 timestamps = [1,10]
-hash_threshold = 10
-
 
 last_num_vids = None
 
@@ -216,7 +221,7 @@ else:
 
 for timestamp in timestamps:
 	print(f'{color["magenta"]}comparing hashes at {color["yellow"]}{timestamp}s{color["default"]}')
-	pools.expand(lambda v : v.hash_at(timestamp), lambda a, b : abs(np.mean(a-b) <= hash_threshold))
+	pools.expand(lambda v : v.hash_at(timestamp), lambda a, b : abs(np.mean(a-b) <= args.hash_threshold))
 	removal_status()
 
 pools.print()
