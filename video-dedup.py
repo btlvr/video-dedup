@@ -14,7 +14,6 @@ from tqdm import tqdm
 import argparse
 import random
 
-
 parser = argparse.ArgumentParser(description='Find and remove duplicate videos')
 
 parser.add_argument(
@@ -26,10 +25,10 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "--duration-threshold",
-    type=int,
-    default=1,
-    help="How different the durations of two videos must be in order to be considered unique"
+	"--duration-threshold",
+	type=int,
+	default=1,
+	help="How different the durations of two videos must be in order to be considered unique"
 )
 
 parser.add_argument(
@@ -39,10 +38,10 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "--hash-threshold",
-    type=int,
-    default=10,
-    help="How different two frame hashes must be in order to be considred unique"
+	"--hash-threshold",
+	type=int,
+	default=10,
+	help="How different two frame hashes must be in order to be considred unique"
 )
 
 args = parser.parse_args()
@@ -70,8 +69,8 @@ color = {
 }
 
 if args.no_color:
-    for c in color:
-        color[c] = ''
+	for c in color:
+		color[c] = ''
 
 movie_extensions = [
 	'mp4',
@@ -197,7 +196,7 @@ def list_files(dir):
 
 videos = []
 for folder in args.dirs:
-    videos += [File(f) for f in list_files(folder) if File(f).is_video()]
+	videos += [File(f) for f in list_files(folder) if File(f).is_video()]
 
 pools = DuplicatePools(videos)
 
@@ -211,13 +210,12 @@ def removal_status():
 
 print(f'{color["blue"]}found {color["green"]}{len(pools)}{color["blue"]} videos{color["default"]}\n')
 
-
 if args.duration_threshold:
-    print(f'{color["magenta"]}excluding videos with durations that differ by more than {color["yellow"]}{args.duration_threshold}{color["magenta"]} seconds{color["default"]}')
-    pools.expand(lambda v : v.duration(), lambda a, b : abs(a-b) <= args.duration_threshold)
-    removal_status()
+	print(f'{color["magenta"]}excluding videos with durations that differ by more than {color["yellow"]}{args.duration_threshold}{color["magenta"]} seconds{color["default"]}')
+	pools.expand(lambda v : v.duration(), lambda a, b : abs(a-b) <= args.duration_threshold)
+	removal_status()
 else:
-    print(f'{color["yellow"]}It\'s probably a good idea to use {color["green"]}--duration-threshold{color["yellow"]}.{color["default"]}\n')
+	print(f'{color["yellow"]}It\'s probably a good idea to use {color["green"]}--duration-threshold{color["yellow"]}.{color["default"]}\n')
 
 for timestamp in timestamps:
 	print(f'{color["magenta"]}comparing hashes at {color["yellow"]}{timestamp}s{color["default"]}')
