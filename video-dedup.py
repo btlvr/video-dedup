@@ -1,18 +1,13 @@
 #! python3
+
 from functools import *
-import os
-import subprocess
-import datetime
-import sys
-import time
-import subprocess
-import cv2
-import numpy as np
-import uuid
-import datetime
+import sys, os, subprocess
+import time, datetime
+import cv2, numpy
+import random, uuid
 from tqdm import tqdm
 import argparse
-import random
+
 
 parser = argparse.ArgumentParser(description='Find and remove duplicate videos')
 
@@ -229,7 +224,7 @@ else:
 
 for timestamp in args.hashes:
 	print(f'{color["magenta"]}comparing hashes at {color["yellow"]}{timestamp}s{color["default"]}')
-	pools.expand(lambda v : v.hash_at(timestamp), lambda a, b : abs(np.mean(a-b) <= args.hash_threshold))
+	pools.expand(lambda v : v.hash_at(timestamp), lambda a, b : abs(numpy.mean(a-b) <= args.hash_threshold))
 	removal_status()
 
 pools.print()
