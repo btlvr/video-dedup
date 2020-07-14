@@ -1,4 +1,6 @@
-color = {
+from args import args
+
+colors = {
 	'default'     : "\033[39m",
 	'black'       : "\033[30m",
 	'red'         : "\033[31m",
@@ -18,6 +20,6 @@ color = {
 	'white'       : "\033[97m"
 }
 
-def disable_color():
-	for c in color:
-		color[c] = ''
+if args.no_color:
+	for c in colors:
+		colors[c] = ''

@@ -1,7 +1,4 @@
-from colors import color, disable_color
-from args import args
-if args.no_color:
-	disable_color()
+from colors import colors as c
 
 def plural(num, name):
 	if num == 1:
@@ -11,39 +8,39 @@ def plural(num, name):
 
 def found_n_videos(n):
 	print(
-		f'{color["blue"]}found ' +
-		f'{color["green"]}{n}' +
-		f'{color["blue"]} videos' +
-		f'{color["default"]}\n'
+		f'{c["blue"]}found ' +
+		f'{c["green"]}{n}' +
+		f'{c["blue"]} videos' +
+		f'{c["default"]}\n'
 	)
 
 def n_videos_remaining(n):
 	print(
-		f'{color["green"]}{n}' +
-		f'{color["blue"]} videos remaining' +
-		f'{color["default"]}\n'
+		f'{c["green"]}{n}' +
+		f'{c["blue"]} videos remaining' +
+		f'{c["default"]}\n'
 	)
 
 def excluding_by_duration(n):
 	print(
-		f'{color["magenta"]}' +
+		f'{c["magenta"]}' +
 		f'excluding videos with durations that differ by more than ' +
-		f'{color["yellow"]}{n}' +
-		f'{color["magenta"]} {plural(n, "second")}' +
-		f'{color["default"]}'
+		f'{c["yellow"]}{n}' +
+		f'{c["magenta"]} {plural(n, "second")}' +
+		f'{c["default"]}'
 	)
 
 def warn_no_duration_threshold():
 	print(
-		f'{color["yellow"]}It\'s probably a good idea to use ' +
-		f'{color["green"]}--duration-threshold' +
-		f'{color["yellow"]}.{color["default"]}\n'
+		f'{c["yellow"]}It\'s probably a good idea to use ' +
+		f'{c["green"]}--duration-threshold' +
+		f'{c["yellow"]}.{c["default"]}\n'
 	)
 
 def comparing_hashes_at(n):
 	print(
-		f'{color["magenta"]}comparing hashes at ' +
-		f'{color["yellow"]}{n}' +
-		f'{color["magenta"]}s' +
-		f'{color["default"]}'
+		f'{c["magenta"]}comparing hashes at ' +
+		f'{c["yellow"]}{n}' +
+		f'{c["magenta"]}s' +
+		f'{c["default"]}'
 	)

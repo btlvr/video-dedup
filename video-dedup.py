@@ -7,7 +7,6 @@ import numpy
 
 from video import Video
 from duplicate_pools import DuplicatePools
-from colors import color, disable_color
 import logger
 from args import args
 
@@ -48,4 +47,3 @@ for timestamp in args.hashes:
 	logger.n_videos_remaining(len(pools))
 
 pools.print()
-
