@@ -10,7 +10,6 @@ from duplicate_pools import DuplicatePools
 from colors import color, disable_color
 from args import args
 
-
 if args.no_color:
 	disable_color()
 	
