@@ -74,14 +74,14 @@ if args.no_color:
 
 
 		
-def list_Videos(dir):
+def list_videos(dir):
 	for dirpath, subdirs, Videos in os.walk(dir):
 		for Video in Videos:
 			yield dirpath+'/'+Video
 
 videos = []
 for folder in args.dirs:
-	videos += [Video(f) for f in list_Videos(folder) if Video(f).is_video()]
+	videos += [Video(f) for f in list_videos(folder) if Video(f).is_video()]
 
 videos_clean = []
 for video in videos:
