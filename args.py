@@ -39,14 +39,14 @@ parser.add_argument(
 	help='list of timestamps (in seconds) to compare frame hashes at',
 )
 
-parser.add_argument(
-	'-e',
-	'--exclude',
-	nargs='+',
-	type=str,
-	default=[],
-	help='list of strings to exclude Videos',
-)
+#parser.add_argument(
+#	'-e',
+#	'--exclude',
+#	nargs='+',
+#	type=str,
+#	default=[],
+#	help='list of strings to exclude Videos',
+#)
 
 
 
