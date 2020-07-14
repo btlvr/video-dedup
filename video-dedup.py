@@ -12,19 +12,9 @@ from colors import color, disable_color
 from args import args
 
 
-
-# terminal colors
-#######################################
-
 if args.no_color:
 	disable_color()
-
-
-
-
-
-
-		
+	
 def list_videos(dir):
 	for dirpath, subdirs, Videos in os.walk(dir):
 		for Video in Videos:
