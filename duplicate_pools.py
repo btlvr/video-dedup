@@ -35,15 +35,16 @@ class DuplicatePools(object):
 	def expand(self, fingerprint, compare):
 		fingerprints = self.fingerprint(fingerprint)
 		new = {}
+		
 		for pool in self.pools:			
 			for item_a, item_b in pairings(pool, ne):
 				new[item_a] = new.get(item_a, set({item_a}))
 				f_a, f_b = fingerprints[item_a], fingerprints[item_b]
 				if f_a is None or f_b is None:
-					continue
-				if compare(f_a, f_b):
-					new[item_a].add(item_b)
-					new[item_a].add(item_a)
+					if compare(f_a, f_b):
+						new[item_a].add(item_b)
+						new[item_a].add(item_a)
+
 		self.pools = list(map(set, new.values()))
 		self.clean()
 
