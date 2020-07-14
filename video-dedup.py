@@ -44,6 +44,16 @@ parser.add_argument(
 	help="How different two frame hashes must be in order to be considred unique"
 )
 
+parser.add_argument(
+	'-H',
+	'--hashes',
+	nargs='+',
+	type=int,
+	default=[1],
+	help='list of timestamps (in seconds) to compare frame hashes at',
+)
+
+
 args = parser.parse_args()
 
 # terminal colors
@@ -200,7 +210,7 @@ for folder in args.dirs:
 
 pools = DuplicatePools(videos)
 
-timestamps = [1,10]
+
 
 last_num_vids = None
 
@@ -217,7 +227,7 @@ if args.duration_threshold:
 else:
 	print(f'{color["yellow"]}It\'s probably a good idea to use {color["green"]}--duration-threshold{color["yellow"]}.{color["default"]}\n')
 
-for timestamp in timestamps:
+for timestamp in args.hashes:
 	print(f'{color["magenta"]}comparing hashes at {color["yellow"]}{timestamp}s{color["default"]}')
 	pools.expand(lambda v : v.hash_at(timestamp), lambda a, b : abs(np.mean(a-b) <= args.hash_threshold))
 	removal_status()
