@@ -29,7 +29,7 @@ class DuplicatePools(object):
 					if item_a == item_b:
 						continue
 					new[item_a] = new.get(item_a, set({item_a}))
-
+					
 					f_a, f_b = (fingerprints[item_a], fingerprints[item_b])
 					if f_a is not None and f_b is not None:
 						if compare(f_a, f_b):

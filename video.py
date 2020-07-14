@@ -18,6 +18,7 @@ movie_extensions = [
 class Video(object):
 	def __init__(self, path):
 		self.path = path
+		self.broken = False
 
 	def duration(self):
 		cmd = [
@@ -31,9 +32,9 @@ class Video(object):
 			self.path
 		]
 		try:
-			duration = float(subprocess.check_output(cmd))
+			duration = float(subprocess.check_output(cmd, stderr=subprocess.DEVNULL))
 		except subprocess.CalledProcessError:
-			print(f'couldn\'t get duration for {self.path}')
+			self.broken = True
 			return None
 
 		return duration

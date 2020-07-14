@@ -37,21 +37,52 @@ pools = DuplicatePools(videos)
 
 last_num_vids = None
 
+def plural(num, name):
+	if num == 1:
+		return name
+	else:
+		return name+'s'
+
 def removal_status():
 	new_len = len(pools)
-	print(f'    {color["yellow"]}{new_len}{color["green"]} videos remaining{color["default"]}\n')
+	print(
+		' '*4 +
+		f'{color["yellow"]}{new_len}' +
+		f'{color["green"]} {plural(new_len, "video")}' +
+		f' remaining{color["default"]}\n'
+	)
 
-print(f'{color["blue"]}found {color["green"]}{len(pools)}{color["blue"]} videos{color["default"]}\n')
+print(
+	f'{color["blue"]}found ' +
+	f'{color["green"]}{len(pools)}' +
+	f'{color["blue"]} videos' +
+	f'{color["default"]}\n'
+)
 
 if args.duration_threshold:
-	print(f'{color["magenta"]}excluding videos with durations that differ by more than {color["yellow"]}{args.duration_threshold}{color["magenta"]} seconds{color["default"]}')
+	print(
+		f'{color["magenta"]}' +
+		f'excluding videos with durations that differ by more than ' +
+		f'{color["yellow"]}{args.duration_threshold}' +
+		f'{color["magenta"]} {plural(args.duration_threshold, "second")}' +
+		f'{color["default"]}'
+	)
+
 	pools.expand(lambda v : v.duration(), lambda a, b : abs(a-b) <= args.duration_threshold)
 	removal_status()
 else:
-	print(f'{color["yellow"]}It\'s probably a good idea to use {color["green"]}--duration-threshold{color["yellow"]}.{color["default"]}\n')
+	print(
+		f'{color["yellow"]}It\'s probably a good idea to use ' +
+		f'{color["green"]}--duration-threshold' +
+		f'{color["yellow"]}.{color["default"]}\n'
+	)
 
 for timestamp in args.hashes:
-	print(f'{color["magenta"]}comparing hashes at {color["yellow"]}{timestamp}s{color["default"]}')
+	print(
+		f'{color["magenta"]}comparing hashes at ' +
+		f'{color["yellow"]}{timestamp}' +
+		f'{color["magenta"]}s' +
+		f'{color["default"]}')
 	pools.expand(lambda v : v.hash_at(timestamp), lambda a, b : abs(numpy.mean(a-b) <= args.hash_threshold))
 	removal_status()
 
