@@ -10,26 +10,21 @@ from duplicate_pools import DuplicatePools
 import logger
 from args import args
 
-
-def list_videos(dir):
+def list_files(dir):
 	for dirpath, subdirs, Videos in os.walk(dir):
 		for Video in Videos:
 			yield dirpath+'/'+Video
 
-videos = []
+videos = set()
 for folder in args.dirs:
-	videos += [Video(f) for f in list_videos(folder) if Video(f).is_video()]
+	videos = videos.union(set(map(Video, list_files(folder))))
 
-videos_clean = []
-for video in videos:
-	include = True
-	for exclude in args.exclude:
-		if exclude.lower() in video.path.lower():
-			include = False
-	if include:
-		videos_clean += [video]
+def file_is_excluded(file):
+	if not file.is_video:
+		return True
+	return False
 
-videos = videos_clean
+videos = [v for v in videos if not file_is_excluded(v)]
 
 pools = DuplicatePools(videos)
 
