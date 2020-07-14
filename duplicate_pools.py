@@ -1,9 +1,10 @@
-from functools import *
 from tqdm import tqdm
 from colors import colors as color
 from operator import *
-from collections import defaultdict
+from functools import *
 from contextlib import suppress
+from collections import defaultdict
+
 
 # return all (a, b) pairs in i, such that criteria(a, b) == True
 def pairings(i, criteria):
