@@ -5,62 +5,13 @@ import os
 import time
 import numpy
 from tqdm import tqdm
-import argparse
+
 from video import Video
 from duplicate_pools import DuplicatePools
 from colors import color, disable_color
-
-parser = argparse.ArgumentParser(description='Find and remove duplicate videos')
-
-parser.add_argument(
-	'--no-color',
-	dest='no_color',
-	action='store_const',
-	const=True, default=False,
-	help='Disable color output'
-)
-
-parser.add_argument(
-	"--duration-threshold",
-	type=int,
-	default=1,
-	help="How different the durations of two videos must be in order to be considered unique"
-)
-
-parser.add_argument(
-	'dirs',
-	nargs='+',
-	help='Directories'
-)
-
-parser.add_argument(
-	"--hash-threshold",
-	type=int,
-	default=10,
-	help="How different two frame hashes must be in order to be considred unique"
-)
-
-parser.add_argument(
-	'-H',
-	'--hashes',
-	nargs='+',
-	type=int,
-	default=[1],
-	help='list of timestamps (in seconds) to compare frame hashes at',
-)
-
-parser.add_argument(
-	'-e',
-	'--exclude',
-	nargs='+',
-	type=str,
-	default=[],
-	help='list of strings to exclude Videos',
-)
+from args import args
 
 
-
-args = parser.parse_args()
 
 # terminal colors
 #######################################
@@ -117,14 +68,3 @@ for timestamp in args.hashes:
 	removal_status()
 
 pools.print()
-
-
-
-
-
-
-
-
-
-
-
