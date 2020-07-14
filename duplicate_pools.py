@@ -33,7 +33,6 @@ class DuplicatePools(object):
 
 	def expand(self, fingerprint, compare):
 		fingerprints = self.fingerprint(fingerprint)
-		
 		new = {}
 		for pool in self.pools:			
 			for item_a, item_b in pairings(pool, ne):
@@ -44,9 +43,7 @@ class DuplicatePools(object):
 				if compare(f_a, f_b):
 					new[item_a].add(item_b)
 					new[item_a].add(item_a)
-		
 		self.pools = list(map(set, new.values()))
-		
 		self.clean()
 
 	def clean(self):
