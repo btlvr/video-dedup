@@ -23,7 +23,7 @@ class DuplicatePools(object):
 		print(f'{color["dgray"]}{"-"*hbar_width}{color["default"]}')
 
 	def items(self):
-		return reduce(set.union, self.pools) 
+		return reduce(set.union, self.pools)
 
 	def fingerprint(self, func):
 		fingerprints = defaultdict(lambda : None)
