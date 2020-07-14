@@ -17,6 +17,13 @@ def found_n_videos(n):
 		f'{color["default"]}\n'
 	)
 
+def n_videos_remaining(n):
+	print(
+		f'{color["green"]}{n}' +
+		f'{color["blue"]} videos remaining' +
+		f'{color["default"]}\n'
+	)
+
 def excluding_by_duration(n):
 	print(
 		f'{color["magenta"]}' +

@@ -34,23 +34,10 @@ videos = videos_clean
 
 pools = DuplicatePools(videos)
 
-last_num_vids = None
-
-def plural(num, name):
-	if num == 1:
-		return name
-	else:
-		return name+'s'
-
-def removal_status():
-	new_len = len(pools)
-	logger.found_n_videos(new_len)
-
-
 if args.duration_threshold:
 	logger.excluding_by_duration(args.duration_threshold)
 	pools.expand(lambda v : v.duration(), lambda a, b : abs(a-b) <= args.duration_threshold)
-	removal_status()
+	logger.found_n_videos(len(pools))
 
 else:
 	logger.warn_duration_threshold()
@@ -58,7 +45,7 @@ else:
 for timestamp in args.hashes:
 	logger.comparing_hashes_at(timestamp)
 	pools.expand(lambda v : v.hash_at(timestamp), lambda a, b : abs(numpy.mean(a-b) <= args.hash_threshold))
-	removal_status()
+	logger.n_videos_remaining(len(pools))
 
 pools.print()
 
