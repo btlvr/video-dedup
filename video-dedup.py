@@ -48,6 +48,16 @@ parser.add_argument(
 	help='list of timestamps (in seconds) to compare frame hashes at',
 )
 
+parser.add_argument(
+	'-e',
+	'--exclude',
+	nargs='+',
+	type=str,
+	default=[],
+	help='list of strings to exclude Videos',
+)
+
+
 
 args = parser.parse_args()
 
@@ -89,7 +99,7 @@ movie_extensions = [
 	'mpg'
 ]
 
-class File(object):
+class Video(object):
 	def __init__(self, path):
 		self.path = path
 
@@ -168,14 +178,11 @@ class DuplicatePools(object):
 					new[item_a] = new.get(item_a, set({item_a}))
 
 					f_a, f_b = (fingerprints[item_a], fingerprints[item_b])
-					f_a = fingerprints[item_a]
-					f_b = fingerprints[item_b]
-
-
-					if compare(f_a, f_b):# and None not in [f_a, f_b]:
-						new[item_a].add(item_b)
-						new[item_a].add(item_a)
-		
+					if f_a is not None and f_b is not None:
+						if compare(f_a, f_b):
+							new[item_a].add(item_b)
+							new[item_a].add(item_a)
+			
 		self.pools = [set({item}).union(new[item]) for item in new]
 		
 		self.clean()
@@ -194,18 +201,27 @@ class DuplicatePools(object):
 	def __len__(self):
 		return len(reduce(set.union, self.pools))
 		
-def list_files(dir):
-	for dirpath, subdirs, files in os.walk(dir):
-		for file in files:
-			yield dirpath+'/'+file
+def list_Videos(dir):
+	for dirpath, subdirs, Videos in os.walk(dir):
+		for Video in Videos:
+			yield dirpath+'/'+Video
 
 videos = []
 for folder in args.dirs:
-	videos += [File(f) for f in list_files(folder) if File(f).is_video()]
+	videos += [Video(f) for f in list_Videos(folder) if Video(f).is_video()]
+
+videos_clean = []
+for video in videos:
+	include = True
+	for exclude in args.exclude:
+		if exclude.lower() in video.path.lower():
+			include = False
+	if include:
+		videos_clean += [video]
+
+videos = videos_clean
 
 pools = DuplicatePools(videos)
-
-
 
 last_num_vids = None
 
