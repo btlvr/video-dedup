@@ -1,10 +1,9 @@
 #! python3
 
 from functools import *
-import sys, os, subprocess
-import time, datetime
-import cv2, numpy
-import random, uuid
+import os
+import time
+import numpy
 from tqdm import tqdm
 import argparse
 from video import Video
