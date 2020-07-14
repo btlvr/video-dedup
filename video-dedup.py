@@ -7,6 +7,8 @@ import numpy
 from tqdm import tqdm
 import argparse
 from video import Video
+from duplicate_pools import DuplicatePools
+from colors import color, disable_color
 
 parser = argparse.ArgumentParser(description='Find and remove duplicate videos')
 
@@ -62,85 +64,15 @@ args = parser.parse_args()
 
 # terminal colors
 #######################################
-color = {
-	'default'     : "\033[39m",
-	'black'       : "\033[30m",
-	'red'         : "\033[31m",
-	'green'       : "\033[32m",
-	'yellow'      : "\033[33m",
-	'blue'        : "\033[34m",
-	'magenta'     : "\033[35m",
-	'cyan'        : "\033[36m",
-	'lgray'       : "\033[37m",
-	'dgray'       : "\033[90m",
-	'lred'        : "\033[91m",
-	'lgreen'      : "\033[92m",
-	'lyellow'     : "\033[93m",
-	'lblue'       : "\033[94m",
-	'lmagenta'    : "\033[95m",
-	'lcyan'       : "\033[96m",
-	'white'       : "\033[97m"
-}
 
 if args.no_color:
-	for c in color:
-		color[c] = ''
+	disable_color()
 
 
 
 
 
-class DuplicatePools(object):
-	def __init__(self, items):
-		self.pools = [set(items)]
 
-	def print(self):
-		hbar_width = 10
-		for pool in self.pools:
-			print(f'{color["dgray"]}{"-"*hbar_width}{color["default"]}')
-			for item in pool:
-				print(f'    {color["yellow"]}{item}{color["default"]}')
-		print(f'{color["dgray"]}{"-"*hbar_width}{color["default"]}')
-
-	def expand(self, fingerprint, compare):
-		fingerprints = {}
-		for item in tqdm(reduce(set.union, self.pools)):
-			try:
-				fingerprints[item] = fingerprint(item)
-			except:
-				fingerprints[item] = None
-		
-		new = {}
-		for pool in self.pools:
-			for item_a in pool:
-				for item_b in pool:
-					if item_a == item_b:
-						continue
-					new[item_a] = new.get(item_a, set({item_a}))
-
-					f_a, f_b = (fingerprints[item_a], fingerprints[item_b])
-					if f_a is not None and f_b is not None:
-						if compare(f_a, f_b):
-							new[item_a].add(item_b)
-							new[item_a].add(item_a)
-			
-		self.pools = [set({item}).union(new[item]) for item in new]
-		
-		self.clean()
-		self.pools = self.pools[::-1]
-		self.clean()
-
-	def clean(self):
-		for index_a, pool_a in enumerate(self.pools):
-			for index_b, pool_b in enumerate(self.pools):
-				if index_a < index_b:
-					if pool_a.issubset(pool_b):
-						self.pools[index_a] = set()
-
-		self.pools = [pool for pool in self.pools if len(pool) > 1]
-
-	def __len__(self):
-		return len(reduce(set.union, self.pools))
 		
 def list_Videos(dir):
 	for dirpath, subdirs, Videos in os.walk(dir):
