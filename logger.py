@@ -44,3 +44,9 @@ def comparing_hashes_at(n):
 		f'{c["magenta"]}s' +
 		f'{c["default"]}'
 	)
+
+def hbar(n=10):
+	print(f'{c["dgray"]}{"-"*n}{c["default"]}')
+
+def print_path(path):
+	print(f'    {c["yellow"]}{path}{c["default"]}')

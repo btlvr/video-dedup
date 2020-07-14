@@ -1,4 +1,5 @@
 from tqdm import tqdm
+import logger
 from colors import colors as color
 from operator import *
 from functools import *
@@ -16,12 +17,11 @@ class DuplicatePools(object):
 		self.pools = [set(items)]
 
 	def print(self):
-		hbar_width = 10
 		for pool in self.pools:
-			print(f'{color["dgray"]}{"-"*hbar_width}{color["default"]}')
+			logger.hbar()
 			for item in pool:
-				print(f'    {color["yellow"]}{item}{color["default"]}')
-		print(f'{color["dgray"]}{"-"*hbar_width}{color["default"]}')
+				logger.print_path(item)
+		logger.hbar()
 
 	def items(self):
 		return reduce(set.union, self.pools)
@@ -35,16 +35,15 @@ class DuplicatePools(object):
 	def expand(self, fingerprint, compare):
 		fingerprints = self.fingerprint(fingerprint)
 		new = {}
-		
 		for pool in self.pools:			
 			for item_a, item_b in pairings(pool, ne):
 				new[item_a] = new.get(item_a, set({item_a}))
 				f_a, f_b = fingerprints[item_a], fingerprints[item_b]
 				if f_a is None or f_b is None:
-					if compare(f_a, f_b):
-						new[item_a].add(item_b)
-						new[item_a].add(item_a)
-
+					continue
+				if compare(f_a, f_b):
+					new[item_a].add(item_b)
+					new[item_a].add(item_a)
 		self.pools = list(map(set, new.values()))
 		self.clean()
 
