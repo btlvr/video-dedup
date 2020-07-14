@@ -13,7 +13,7 @@ This set of videos is then broken up into smaller sets. Each of these sets conta
 'video-dedup` can never be sure if two videos are *actually* duplicates, so it relies on a few heuristics to exclude videos that are definitely *not* duplicates. Once enough of these heuristics have been applied, we can be pretty sure that the remaining un-excluded videos actually are duplicates. It usually works quite well.
 
 ## Screenshot
- ![](https://i.ibb.co/9wvWWGk/2020-07-13-18-21-46.png)
+ ![](https://i.ibb.co/82LsW8n/2020-07-14-09-13-04.png)
 
 ### Example
 - Build set of all video files in directory
