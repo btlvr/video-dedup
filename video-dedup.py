@@ -8,10 +8,9 @@ import numpy
 from video import Video
 from duplicate_pools import DuplicatePools
 from colors import color, disable_color
+import logger
 from args import args
 
-if args.no_color:
-	disable_color()
 	
 def list_videos(dir):
 	for dirpath, subdirs, Videos in os.walk(dir):
@@ -45,45 +44,21 @@ def plural(num, name):
 
 def removal_status():
 	new_len = len(pools)
-	print(
-		' '*4 +
-		f'{color["yellow"]}{new_len}' +
-		f'{color["green"]} {plural(new_len, "video")}' +
-		f' remaining{color["default"]}\n'
-	)
+	logger.found_n_videos(new_len)
 
-print(
-	f'{color["blue"]}found ' +
-	f'{color["green"]}{len(pools)}' +
-	f'{color["blue"]} videos' +
-	f'{color["default"]}\n'
-)
 
 if args.duration_threshold:
-	print(
-		f'{color["magenta"]}' +
-		f'excluding videos with durations that differ by more than ' +
-		f'{color["yellow"]}{args.duration_threshold}' +
-		f'{color["magenta"]} {plural(args.duration_threshold, "second")}' +
-		f'{color["default"]}'
-	)
-
+	logger.excluding_by_duration(args.duration_threshold)
 	pools.expand(lambda v : v.duration(), lambda a, b : abs(a-b) <= args.duration_threshold)
 	removal_status()
+
 else:
-	print(
-		f'{color["yellow"]}It\'s probably a good idea to use ' +
-		f'{color["green"]}--duration-threshold' +
-		f'{color["yellow"]}.{color["default"]}\n'
-	)
+	logger.warn_duration_threshold()
 
 for timestamp in args.hashes:
-	print(
-		f'{color["magenta"]}comparing hashes at ' +
-		f'{color["yellow"]}{timestamp}' +
-		f'{color["magenta"]}s' +
-		f'{color["default"]}')
+	logger.comparing_hashes_at(timestamp)
 	pools.expand(lambda v : v.hash_at(timestamp), lambda a, b : abs(numpy.mean(a-b) <= args.hash_threshold))
 	removal_status()
 
 pools.print()
+
