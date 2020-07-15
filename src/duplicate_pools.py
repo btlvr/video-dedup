@@ -37,10 +37,7 @@ class DuplicatePools(object):
 		
 		items = list(self.items())
 		results = pool_map(func_safe, items)
-		d = dict(zip(items, results))
-		#print("\033[FMy text overwriting the previous line.")
-		return d
-		
+		return dict(zip(items, results))
 
 	def check_if_done(self):
 		if len(self) == 1:
