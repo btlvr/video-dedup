@@ -58,8 +58,7 @@ def progress_bar(item, text_color=c['dgray'], bar_color=c['dgray']):
 	bar_format %= (text_color, bar_color, text_color)
 	return tqdm(
 		item,
-		bar_format=bar_format,
-		ascii=False
+		bar_format=bar_format
 	)
 	print(c["default"])
 
