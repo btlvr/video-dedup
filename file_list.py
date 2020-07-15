@@ -1,6 +1,7 @@
 from video import Video
 from args import args
 import os
+from pathlib import Path
 
 def list_files(dir):
 	for dirpath, subdirs, Videos in os.walk(dir):

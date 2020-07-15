@@ -18,8 +18,9 @@ movie_extensions = [
 
 class Video(object):
 	def __init__(self, path):
-		self.path = Path(path)
+		self.path = Path(path).expanduser().resolve()
 		self.broken = False
+		self.size = None
 
 	def duration(self):
 		cmd = [
@@ -30,7 +31,7 @@ class Video(object):
 			'format=duration',
 			'-of',
 			'default=noprint_wrappers=1:nokey=1',
-			str(self.path.absolute())
+			str(self.path)
 		]
 		try:
 			duration = float(subprocess.check_output(cmd, stderr=subprocess.DEVNULL))
@@ -39,6 +40,10 @@ class Video(object):
 			return None
 
 		return duration
+
+	def size(self):
+		if self.size is None:
+			self.size = 5
 
 	def extension(self):
 		return self.path.split('/')[-1].split('.')[-1]
@@ -49,7 +54,7 @@ class Video(object):
 	def frame_at(self, seconds):
 		timestamp = str(datetime.timedelta(0,seconds))
 		image_path = f'/tmp/.frame_{uuid.uuid4()}.png'
-		cmd = 'ffmpeg', '-y', '-ss', timestamp, '-i', self.path.absolute(), '-vframes', '1', '-q:v', '2', image_path
+		cmd = 'ffmpeg', '-y', '-ss', timestamp, '-i', self.path, '-vframes', '1', '-q:v', '2', image_path
 		subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 		frame = cv2.imread(image_path)
 		os.remove(image_path)
@@ -59,10 +64,10 @@ class Video(object):
 		return cv2.img_hash.blockMeanHash(self.frame_at(seconds))
 
 	def __str__(self):
-		return str(self.path.absolute())
+		return str(self.path)
 
 	def __eq__(self, other):
-		return self.path.absolute() == other.path.absolute()
+		return self.path == other.path.absolute()
 
 	def __hash__(self):
-		return hash(self.path.absolute())
+		return hash(self.path)
