@@ -3,6 +3,7 @@ import datetime
 import cv2
 import uuid
 from pathlib import Path
+from logger import prettify_path
 
 movie_extensions = [
 	'mp4',
@@ -64,11 +65,11 @@ class Video(object):
 		return cv2.img_hash.blockMeanHash(self.frame_at(seconds))
 
 	def __str__(self):
-		return str(self.path)
+		#return str(self.path)
+		return prettify_path(self.path)
 
 	def __eq__(self, other):
 		return self.path == other.path.absolute()
 
 	def __hash__(self):
 		return hash(self.path)
-

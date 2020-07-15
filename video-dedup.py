@@ -1,6 +1,5 @@
 #! python3
 
-from functools import *
 import os
 import time
 import numpy

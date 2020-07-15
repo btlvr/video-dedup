@@ -1,4 +1,5 @@
 from colors import colors as c
+from pathlib import Path
 
 def plural(num, name):
 	if num == 1:
@@ -50,3 +51,38 @@ def hbar(n=10):
 
 def print_path(path):
 	print(f'    {c["yellow"]}{path}{c["default"]}')
+
+def prettify_path(path):
+	path_colors = {
+		'slash':                   c['dgray'],
+		'extension_dot_color':     c['dgray'],
+		'parent':                  c['yellow'],
+		'extension_color':         c['yellow']
+	}
+	
+	components = []
+	while path.absolute() != Path(path.anchor):
+		components += [path.name]
+		path = path.parent
+	components = components[::-1]
+
+	slash = path_colors['slash'] + '/' + path_colors['parent']
+	name, ext = components[-1].split('.',-1)
+
+	pretty_str  = slash
+	pretty_str += slash.join(components[:-1]) 
+	pretty_str += slash
+	pretty_str += name 
+	pretty_str += path_colors['extension_dot_color'] + '.'
+	pretty_str += path_colors['extension_color'] + ext
+	pretty_str += c["default"]
+
+	return pretty_str
+
+
+
+
+
+
+
+
