@@ -46,7 +46,7 @@ class Video(object):
 			self.size = 5
 
 	def extension(self):
-		return self.path.split('/')[-1].split('.')[-1]
+		return self.path.name.split('.')[-1]
 
 	def is_video(self):
 		return self.extension() in movie_extensions
@@ -71,3 +71,4 @@ class Video(object):
 
 	def __hash__(self):
 		return hash(self.path)
+
