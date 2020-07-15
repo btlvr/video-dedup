@@ -64,10 +64,10 @@ def progress_bar(item, text_color=c['dgray'], bar_color=c['dgray']):
 
 def prettify_path(path):
 	path_colors = {
-		'slash':                   c['dgray'],
-		'extension_dot_color':     c['dgray'],
-		'parent':                  c['blue'],
-		'extension_color':         c['blue']
+		'slash':                 c['dgray'],
+		'extension_dot_color':   c['dgray'],
+		'parent':                c['blue'],
+		'extension_color':       c['blue']
 	}
 	
 	components = []
