@@ -24,6 +24,10 @@ class DuplicatePools(object):
 		logger.hbar()
 
 	def items(self):
+		if not len(self.pools):
+			return {}
+		elif not len(self.pools[0]):
+			return {}
 		return reduce(set.union, self.pools)
 
 	def fingerprint(self, func):
@@ -45,6 +49,11 @@ class DuplicatePools(object):
 					new[item_a].add(item_b)
 					new[item_a].add(item_a)
 		self.pools = list(map(set, new.values()))
+
+		if len(self) == 0:
+			print("no duplicates found")
+			exit(0)
+
 		self.clean()
 
 	def clean(self):
