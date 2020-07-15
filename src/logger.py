@@ -53,12 +53,17 @@ def hbar(n=10):
 def path_does_not_exist(path):
 	print(f'{c["red"]}error: supplied path {prettify_path(path)}{c["red"]} does not exist')
 
-def progress_bar(item, text_color=c['dgray'], bar_color=c['dgray']):
+def progress_bar(item, total=None, text_color=c['dgray'], bar_color=c['dgray']):
+	if total is None:
+		total = len(item)
+
 	bar_format = "%s{l_bar}%s{bar}%s{r_bar}" 
 	bar_format %= (text_color, bar_color, text_color)
 	return tqdm(
 		item,
-		bar_format=bar_format
+		bar_format=bar_format,
+		total=total,
+		leave=False
 	)
 	print(c["default"])
 
