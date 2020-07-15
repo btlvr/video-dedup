@@ -1,8 +1,6 @@
 from video import Video
 from args import args
-import os
 from pathlib import Path
-import pathlib
 
 for func in [Path, Path.expanduser, Path.resolve]:
 	args.dirs = list(map(func, args.dirs))
