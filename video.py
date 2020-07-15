@@ -2,6 +2,7 @@ import os, subprocess
 import datetime
 import cv2
 import uuid
+from pathlib import Path
 
 movie_extensions = [
 	'mp4',
@@ -17,7 +18,7 @@ movie_extensions = [
 
 class Video(object):
 	def __init__(self, path):
-		self.path = path
+		self.path = Path(path)
 		self.broken = False
 
 	def duration(self):
@@ -29,7 +30,7 @@ class Video(object):
 			'format=duration',
 			'-of',
 			'default=noprint_wrappers=1:nokey=1',
-			self.path
+			str(self.path)
 		]
 		try:
 			duration = float(subprocess.check_output(cmd, stderr=subprocess.DEVNULL))
@@ -58,10 +59,10 @@ class Video(object):
 		return cv2.img_hash.blockMeanHash(self.frame_at(seconds))
 
 	def __str__(self):
-		return self.path
+		return str(self.path.absolute())
 
 	def __eq__(self, other):
-		return self.path == other.path
+		return self.path.absolute() == other.path.absolute()
 
 	def __hash__(self):
-		return hash(self.path)
+		return hash(self.path.absolute())

@@ -48,6 +48,4 @@ parser.add_argument(
 #	help='list of strings to exclude Videos',
 #)
 
-
-
 args = parser.parse_args()
