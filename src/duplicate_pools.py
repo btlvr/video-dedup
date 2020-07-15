@@ -38,11 +38,8 @@ class DuplicatePools(object):
 			return None
 		items = list(self.items())
 
-		results = ProcessingPool().map(func_safe, items)
-		#results = list(map(func_safe, items))
-		
-		#print(results)
-		#exit()
+		#results = ProcessingPool().map(func_safe, items)
+		results = list(map(func_safe, items))
 
 		return dict(zip(items, results))
 	
