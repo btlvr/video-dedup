@@ -30,7 +30,7 @@ class Video(object):
 			'format=duration',
 			'-of',
 			'default=noprint_wrappers=1:nokey=1',
-			str(self.path)
+			str(self.path.absolute())
 		]
 		try:
 			duration = float(subprocess.check_output(cmd, stderr=subprocess.DEVNULL))
