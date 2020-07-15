@@ -1,13 +1,14 @@
 from video import Video
 from args import args
 from pathlib import Path
+import logger
 
 for func in [Path, Path.expanduser, Path.resolve]:
 	args.dirs = list(map(func, args.dirs))
 
 for path in args.dirs:
 	if not path.exists():
-		print(f'supplied path {path} does not exist')
+		logger.path_does_not_exist(path)
 		exit(1)
 
 all_files = set()

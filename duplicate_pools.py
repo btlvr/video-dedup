@@ -20,7 +20,7 @@ class DuplicatePools(object):
 		for pool in self.pools:
 			logger.hbar()
 			for item in pool:
-				logger.print_path(item)
+				print('    ', item)
 		logger.hbar()
 
 	def items(self):

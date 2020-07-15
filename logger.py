@@ -49,8 +49,8 @@ def comparing_hashes_at(n):
 def hbar(n=10):
 	print(f'{c["dgray"]}{"-"*n}{c["default"]}')
 
-def print_path(path):
-	print(f'    {c["yellow"]}{path}{c["default"]}')
+def path_does_not_exist(path):
+	print(f'{c["red"]}error: supplied path {prettify_path(path)}{c["red"]} does not exist')
 
 def prettify_path(path):
 	path_colors = {
@@ -67,14 +67,18 @@ def prettify_path(path):
 	components = components[::-1]
 
 	slash = path_colors['slash'] + '/' + path_colors['parent']
-	name, ext = components[-1].split('.',-1)
+	
+	name, ext = components[-1], None
+	if '.' in components[-1]:
+		name, ext = components[-1].split('.',-1)
 
 	pretty_str  = slash
 	pretty_str += slash.join(components[:-1]) 
 	pretty_str += slash
-	pretty_str += name 
-	pretty_str += path_colors['extension_dot_color'] + '.'
-	pretty_str += path_colors['extension_color'] + ext
+	pretty_str += name
+	if ext is not None:
+		pretty_str += path_colors['extension_dot_color'] + '.'
+		pretty_str += path_colors['extension_color'] + ext
 	pretty_str += c["default"]
 
 	return pretty_str
