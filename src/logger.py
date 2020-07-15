@@ -1,5 +1,6 @@
 from colors import colors as c
 from pathlib import Path
+from tqdm import tqdm
 
 def plural(num, name):
 	if num == 1:
@@ -52,12 +53,22 @@ def hbar(n=10):
 def path_does_not_exist(path):
 	print(f'{c["red"]}error: supplied path {prettify_path(path)}{c["red"]} does not exist')
 
+def progress_bar(item, text_color=c['dgray'], bar_color=c['dgray']):
+	bar_format = "%s{l_bar}%s{bar}%s{r_bar}" 
+	bar_format %= (text_color, bar_color, text_color)
+	return tqdm(
+		item,
+		bar_format=bar_format,
+		ascii=False
+	)
+	print(c["default"])
+
 def prettify_path(path):
 	path_colors = {
 		'slash':                   c['dgray'],
 		'extension_dot_color':     c['dgray'],
-		'parent':                  c['yellow'],
-		'extension_color':         c['yellow']
+		'parent':                  c['blue'],
+		'extension_color':         c['blue']
 	}
 	
 	components = []

@@ -1,5 +1,4 @@
 import logger
-from tqdm import tqdm
 from colors import colors as color
 from operator import *
 from functools import *
@@ -32,7 +31,7 @@ class DuplicatePools(object):
 
 	def fingerprint(self, func):
 		fingerprints = defaultdict(lambda : None)
-		for item in tqdm(self.items()):
+		for item in logger.progress_bar(self.items()):
 			with suppress(Exception): fingerprints[item] = func(item)
 		return fingerprints
 
