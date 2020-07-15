@@ -4,6 +4,7 @@ import cv2
 import uuid
 from pathlib import Path
 from logger import prettify_path
+import functools
 
 movie_extensions = [
 	'mp4',
@@ -17,12 +18,72 @@ movie_extensions = [
 	'mpg'
 ]
 
-class Video(object):
+class memoized(object):
+	def __init__(self, func):
+		self.func = func
+		self.cache = {}
+
+	def __call__(self, *args):
+		try:
+			return self.cache[args]
+		except KeyError:
+			value = self.func(*args)
+			self.cache[args] = value
+			return value
+		except TypeError:
+			return self.func(*args)
+
+	def __repr__(self):
+		return self.func.__repr__()
+
+	def __get__(self, obj, objtype):
+		return functools.partial(self.__call__, obj)
+
+class File(object):
 	def __init__(self, path):
 		self.path = Path(path).expanduser().resolve()
-		self.broken = False
-		self.size = None
+	
+	@property
+	@memoized
+	def stat(self):
+		return self.path.stat()
 
+	@property
+	@memoized
+	def size(self):
+		return self.stat.st_size
+	
+	@property
+	def extension(self):
+		return self.path.name.split('.')[-1]
+
+	def is_video(self):
+		return self.extension in movie_extensions
+
+	@property
+	@memoized
+	def pretty_path(self):
+		return prettify_path(self.path)
+
+	def __str__(self):
+		return str(self.path)
+
+	def __eq__(self, other):
+		return self.path == other.path.absolute()
+
+	def __hash__(self):
+		return hash(self.path)
+
+	def __repr__(self):
+		class_name = self.__class__.__name__
+		return f'{class_name}({self.path.name})'
+
+class Video(File):
+	def __init__(self, path):
+		super().__init__(path)
+		self.broken = False
+
+	@memoized
 	def duration(self):
 		cmd = [
 			'ffprobe',
@@ -42,15 +103,8 @@ class Video(object):
 
 		return duration
 
-	def size(self):
-		if self.size is None:
-			self.size = 5
-
-	def extension(self):
-		return self.path.name.split('.')[-1]
-
 	def is_video(self):
-		return self.extension() in movie_extensions
+		return self.extension in movie_extensions
 
 	def frame_at(self, seconds):
 		timestamp = str(datetime.timedelta(0,seconds))
@@ -63,13 +117,3 @@ class Video(object):
 
 	def hash_at(self, seconds):
 		return cv2.img_hash.blockMeanHash(self.frame_at(seconds))
-
-	def __str__(self):
-		#return str(self.path)
-		return prettify_path(self.path)
-
-	def __eq__(self, other):
-		return self.path == other.path.absolute()
-
-	def __hash__(self):
-		return hash(self.path)
