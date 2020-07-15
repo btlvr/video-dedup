@@ -39,6 +39,14 @@ parser.add_argument(
 	help='list of timestamps (in seconds) to compare frame hashes at',
 )
 
+parser.add_argument(
+	'--list',
+	dest='list_videos',
+	action='store_const',
+	const=True, default=False,
+	help='print the videos which will be operated on and exit'
+)
+
 #parser.add_argument(
 #	'-e',
 #	'--exclude',

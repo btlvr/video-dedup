@@ -94,11 +94,13 @@ def prettify_path(path):
 		path = path.parent
 	components = components[::-1]
 
+
 	slash = path_colors['slash'] + '/' + path_colors['parent']
 	
-	name, ext = components[-1], None
+	name, ext = components[-1].split('.')[0], None
+
 	if '.' in components[-1]:
-		name, ext = components[-1].split('.',-1)
+		ext = components[-1].split('.')[-1]
 
 	pretty_str  = slash
 	pretty_str += slash.join(components[:-1]) 
@@ -111,10 +113,7 @@ def prettify_path(path):
 
 	return pretty_str
 
-
-
-
-
-
-
-
+def print_videos(videos):
+	for video in videos:
+		print(video.pretty_path)
+	exit(0)

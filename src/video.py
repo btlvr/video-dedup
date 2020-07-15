@@ -56,7 +56,10 @@ class File(object):
 	
 	@property
 	def extension(self):
-		return self.path.name.split('.')[-1]
+		if '.' in self.path.name:
+			return self.path.name.split('.')[-1]
+		else:
+			return None
 
 	def is_video(self):
 		return self.extension in movie_extensions

@@ -9,6 +9,9 @@ import logger
 from args import args
 from file_list import videos
 
+if args.list_videos:
+	logger.print_videos(videos)
+
 pools = DuplicatePools(videos)
 
 logger.found_n_videos(len(pools))
