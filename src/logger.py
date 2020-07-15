@@ -2,6 +2,15 @@ from colors import colors as c
 from pathlib import Path
 from tqdm import tqdm
 
+last_line_was_progress_bar = False
+
+def log(msg):
+	global last_line_was_progress_bar
+	if last_line_was_progress_bar:
+		print('\033[F', end='')
+		last_line_was_progress_bar = False
+	print(msg, end=c['default'] + '\n')
+
 def plural(num, name):
 	if num == 1:
 		return name
@@ -9,22 +18,23 @@ def plural(num, name):
 		return name+'s'
 
 def found_n_videos(n):
-	print(
+	log(
 		f'{c["blue"]}found ' +
 		f'{c["green"]}{n}' +
 		f'{c["blue"]} videos' +
-		f'{c["default"]}\n'
+		f'{c["default"]}'
 	)
 
 def n_videos_remaining(n):
-	print(
+	log(
+		
 		f'{c["green"]}{n}' +
 		f'{c["blue"]} videos remaining' +
-		f'{c["default"]}\n'
+		f'{c["default"]}'
 	)
 
 def excluding_by_duration(n):
-	print(
+	log(
 		f'{c["magenta"]}' +
 		f'excluding videos with durations that differ by more than ' +
 		f'{c["yellow"]}{n}' +
@@ -33,14 +43,14 @@ def excluding_by_duration(n):
 	)
 
 def warn_no_duration_threshold():
-	print(
+	log(
 		f'{c["yellow"]}It\'s probably a good idea to use ' +
 		f'{c["green"]}--duration-threshold' +
-		f'{c["yellow"]}.{c["default"]}\n'
+		f'{c["yellow"]}.{c["default"]}'
 	)
 
 def comparing_hashes_at(n):
-	print(
+	log(
 		f'{c["magenta"]}comparing hashes at ' +
 		f'{c["yellow"]}{n}' +
 		f'{c["magenta"]}s' +
@@ -48,12 +58,15 @@ def comparing_hashes_at(n):
 	)
 
 def hbar(n=10):
-	print(f'{c["dgray"]}{"-"*n}{c["default"]}')
+	log(f'{c["dgray"]}{"-"*n}{c["default"]}')
 
 def path_does_not_exist(path):
-	print(f'{c["red"]}error: supplied path {prettify_path(path)}{c["red"]} does not exist')
+	log(f'{c["red"]}error: supplied path {prettify_path(path)}{c["red"]} does not exist')
 
 def progress_bar(item, total=None, text_color=c['dgray'], bar_color=c['dgray']):
+	global last_line_was_progress_bar
+	last_line_was_progress_bar = True
+
 	if total is None:
 		total = len(item)
 
@@ -63,9 +76,9 @@ def progress_bar(item, total=None, text_color=c['dgray'], bar_color=c['dgray']):
 		item,
 		bar_format=bar_format,
 		total=total,
-		leave=False
+		leave=False,
+		position=0
 	)
-	print(c["default"])
 
 def prettify_path(path):
 	path_colors = {
