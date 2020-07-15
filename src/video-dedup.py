@@ -9,7 +9,6 @@ import logger
 from args import args
 from file_list import videos
 
-
 pools = DuplicatePools(videos)
 
 if args.duration_threshold:

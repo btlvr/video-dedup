@@ -25,11 +25,12 @@ class memoized(object):
 
 	def __call__(self, *args):
 		try:
-			return self.cache[args]
-		except KeyError:
-			value = self.func(*args)
-			self.cache[args] = value
-			return value
+			if args in self.cache:
+				return self.cache[args]
+			else:
+				value = self.func(*args)
+				self.cache[args] = value
+				return value
 		except TypeError:
 			return self.func(*args)
 
