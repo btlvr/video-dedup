@@ -1,5 +1,5 @@
-from tqdm import tqdm
 import logger
+from tqdm import tqdm
 from colors import colors as color
 from operator import *
 from functools import *
@@ -49,7 +49,7 @@ class DuplicatePools(object):
 
 	def clean(self):
 		# delete subpools
-		for a, b in pairings((range(len(self.pools))), ne):			
+		for a, b in pairings((range(len(self.pools))), ne):
 			if self.pools[a].issubset(self.pools[b]):
 				self.pools[a] = set()
 
