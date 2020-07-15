@@ -4,7 +4,9 @@ from operator import *
 from functools import *
 from contextlib import suppress
 from collections import defaultdict
+from multiprocessing import Pool
 
+from pathos.multiprocessing import ProcessingPool
 
 # return all (a, b) pairs in i, such that criteria(a, b) == True
 def pairings(i, criteria):
@@ -29,11 +31,28 @@ class DuplicatePools(object):
 			return {}
 		return reduce(set.union, self.pools)
 
+	def fingerprint_multi(self, func):
+		def func_safe(item):
+			#with suppress(Exception):
+			return func(item)
+			return None
+		items = list(self.items())
+
+		results = ProcessingPool().map(func_safe, items)
+		#results = list(map(func_safe, items))
+		
+		#print(results)
+		#exit()
+
+		return dict(zip(items, results))
+	
+	'''
 	def fingerprint(self, func):
 		fingerprints = defaultdict(lambda : None)
 		for item in logger.progress_bar(self.items()):
 			with suppress(Exception): fingerprints[item] = func(item)
 		return fingerprints
+	'''
 
 	def check_if_done(self):
 		if len(self) == 1:
@@ -45,7 +64,8 @@ class DuplicatePools(object):
 
 	def expand(self, fingerprint, compare):
 		self.check_if_done()
-		fingerprints = self.fingerprint(fingerprint)
+		fingerprints = self.fingerprint_multi(fingerprint)
+
 		new = {}
 		for pool in self.pools:			
 			for item_a, item_b in pairings(pool, ne):
