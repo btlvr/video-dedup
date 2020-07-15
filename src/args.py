@@ -19,8 +19,8 @@ parser.add_argument(
 
 parser.add_argument(
 	'dirs',
-	nargs='+',
-	help='Directories'
+	nargs='*',
+	help='Directories',
 )
 
 parser.add_argument(

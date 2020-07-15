@@ -2,6 +2,9 @@ from video import Video
 from args import args
 from pathlib import Path
 import logger
+import sys, os
+
+args.dirs += [p for p in sys.stdin.read().split('\n') if len(p.strip())]
 
 for func in [Path, Path.expanduser, Path.resolve]:
 	args.dirs = list(map(func, args.dirs))
