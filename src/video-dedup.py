@@ -11,13 +11,15 @@ from file_list import videos
 
 pools = DuplicatePools(videos)
 
+logger.found_n_videos(len(pools))
+
 if args.duration_threshold:
 	logger.excluding_by_duration(args.duration_threshold)
 	pools.expand(
 		lambda v : v.duration(),
 		lambda a, b : abs(a-b) <= args.duration_threshold
 	)
-	logger.found_n_videos(len(pools))
+	logger.n_videos_remaining(len(pools))
 else:
 	logger.warn_duration_threshold()
 
