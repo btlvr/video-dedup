@@ -40,13 +40,10 @@ class DuplicatePools(object):
 		return dict(zip(items, results))
 
 	def check_if_done(self):
-		if len(self) == 1:
+		if len(self) <= 1:
 			print("no duplicates found")
 			exit(0)
-		if len(self) == 0:
-			print("no duplicates found")
-			exit(0)
-
+		
 	def expand(self, fingerprint, compare):
 		self.check_if_done()
 		fingerprints = self.fingerprint(fingerprint)
