@@ -36,7 +36,16 @@ class DuplicatePools(object):
 			with suppress(Exception): fingerprints[item] = func(item)
 		return fingerprints
 
+	def check_if_done(self):
+		if len(self) == 1:
+			print("no duplicates found")
+			exit(0)
+		if len(self) == 0:
+			print("no duplicates found")
+			exit(0)
+
 	def expand(self, fingerprint, compare):
+		self.check_if_done()
 		fingerprints = self.fingerprint(fingerprint)
 		new = {}
 		for pool in self.pools:			
@@ -49,12 +58,8 @@ class DuplicatePools(object):
 					new[item_a].add(item_b)
 					new[item_a].add(item_a)
 		self.pools = list(map(set, new.values()))
-
-		if len(self) == 0:
-			print("no duplicates found")
-			exit(0)
-
 		self.clean()
+		self.check_if_done()
 
 	def clean(self):
 		# delete subpools
