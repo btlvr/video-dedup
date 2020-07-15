@@ -49,7 +49,7 @@ class Video(object):
 	def frame_at(self, seconds):
 		timestamp = str(datetime.timedelta(0,seconds))
 		image_path = f'/tmp/.frame_{uuid.uuid4()}.png'
-		cmd = 'ffmpeg', '-y', '-ss', timestamp, '-i', self.path, '-vframes', '1', '-q:v', '2', image_path
+		cmd = 'ffmpeg', '-y', '-ss', timestamp, '-i', self.path.absolute(), '-vframes', '1', '-q:v', '2', image_path
 		subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 		frame = cv2.imread(image_path)
 		os.remove(image_path)
