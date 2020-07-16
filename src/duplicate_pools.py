@@ -8,15 +8,17 @@ from pool_map import pool_map
 from tqdm import tqdm
 
 # return all (a, b) pairs in i, such that criteria(a, b) == True
+'''
 def pairings(i, criteria):
 	permutations = [set((a, b) for a in i if criteria(a, b)) for b in i]
 	return reduce(set.union, permutations)
+'''
 
 # return all (a, b) pairs in i, such that criteria(a, b) == True
 def pairings(i, criteria):
 	for a in i:
 		for b in i:
-			if a is not b:
+			if criteria(a, b):
 				yield (a, b)
 	#permutations = [set((a, b) for a in i if criteria(a, b)) for b in i]
 	#return reduce(set.union, permutations)
@@ -61,14 +63,15 @@ class DuplicatePools(object):
 		
 		new = {}
 
-		total_comparisons = sum([len(p)**2 - len(p) for p in self.pools])
+		total_comparisons = sum([len(p)**2 - len(p) for p in self.pools])//2
 		pbar = logger.progress_bar(None, total=total_comparisons, desc="comparing")
-
+		
 		for pool in self.pools:
 			pool = list(pool)
 
 			for index_a, index_b in pairings(range(len(pool)), lt):
 				item_a, item_b = pool[index_a], pool[index_b]
+
 				new[item_a] = new.get(item_a, set({item_a}))
 				f_a, f_b = fingerprints[item_a], fingerprints[item_b]
 				if f_a is None or f_b is None:
