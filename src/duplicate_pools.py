@@ -5,6 +5,7 @@ from functools import *
 from contextlib import suppress
 from collections import defaultdict
 from pool_map import pool_map
+from tqdm import tqdm
 
 # return all (a, b) pairs in i, such that criteria(a, b) == True
 def pairings(i, criteria):
@@ -45,7 +46,7 @@ class DuplicatePools(object):
 			return None
 		
 		items = list(self.items())
-		results = pool_map(func_safe, items, parallel=False)
+		results = pool_map(func_safe, items, parallel=True, desc="calculating")
 		return dict(zip(items, list(results)))
 		
 
@@ -59,8 +60,12 @@ class DuplicatePools(object):
 		fingerprints = self.fingerprint(fingerprint)
 		
 		new = {}
+
+		total_comparisons = sum([len(p)**2 - len(p) for p in self.pools])
+		pbar = logger.progress_bar(None, total=total_comparisons, desc="comparing")
+
 		for pool in self.pools:
-			for item_a, item_b in pairings(pool, ne):
+			for item_a, item_b in pairings(pool, lt):
 				new[item_a] = new.get(item_a, set({item_a}))
 				f_a, f_b = fingerprints[item_a], fingerprints[item_b]
 				if f_a is None or f_b is None:
@@ -68,6 +73,8 @@ class DuplicatePools(object):
 				if compare(f_a, f_b):
 					new[item_a].add(item_b)
 					new[item_a].add(item_a)
+				pbar.update(1)
+		pbar.close()
 		
 		self.pools = list(map(set, new.values()))
 		

@@ -1,17 +1,22 @@
 from colors import colors as c
 from pathlib import Path
 from tqdm import tqdm
+import sys
 
 last_line_was_progress_bar = False
 
-line_up = '\033[F\033[K'
 
-def log(msg):
+def clear_previous_bar():
 	global last_line_was_progress_bar
+
+	line_up = '\033[F\033[K'
 	if last_line_was_progress_bar:
 		print(line_up, end='')
+		sys.stdout.flush()
 		last_line_was_progress_bar = False
 
+def log(msg):
+	clear_previous_bar()
 	print(msg)
 
 def plural(num, name):
@@ -65,7 +70,8 @@ def hbar(n=10):
 def path_does_not_exist(path):
 	log(f'{c["red"]}error: supplied path {prettify_path(path)}{c["red"]} does not exist')
 
-def progress_bar(item, total=None, text_color=c['dgray'], bar_color=c['dgray']):
+def progress_bar(item, total=None, desc="", text_color=c['dgray'], bar_color=c['dgray']):
+	clear_previous_bar()
 	global last_line_was_progress_bar
 	last_line_was_progress_bar = True
 
@@ -78,7 +84,8 @@ def progress_bar(item, total=None, text_color=c['dgray'], bar_color=c['dgray']):
 		item,
 		bar_format=bar_format,
 		total=total,
-		leave=False
+		leave=False,
+		desc=desc
 	)
 
 def prettify_path(path):
