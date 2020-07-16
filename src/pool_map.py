@@ -18,3 +18,4 @@ def pool_map(func, items, parallel=True):
 	results = pool.imap(worker, items)
 	
 	return progress_bar(results, len(items)-1)
+	#return progress_bar(results, len(items)-3)

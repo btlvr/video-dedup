@@ -4,7 +4,8 @@ from pathlib import Path
 import logger
 import sys, os
 
-args.dirs += [p for p in sys.stdin.read().split('\n') if len(p.strip())]
+if not sys.stdin.isatty():
+	args.dirs += [p for p in sys.stdin.read().split('\n') if len(p.strip())]
 
 for func in [Path, Path.expanduser, Path.resolve]:
 	args.dirs = list(map(func, args.dirs))
@@ -20,5 +21,7 @@ for path in args.dirs:
 		all_files = all_files.union(set(path.iterdir()))
 	else:
 		all_files.add(path)
+
+#print(all_files)
 
 videos = list(filter(Video.is_video, map(Video, all_files)))

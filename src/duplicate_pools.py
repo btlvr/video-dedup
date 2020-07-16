@@ -11,6 +11,15 @@ def pairings(i, criteria):
 	permutations = [set((a, b) for a in i if criteria(a, b)) for b in i]
 	return reduce(set.union, permutations)
 
+# return all (a, b) pairs in i, such that criteria(a, b) == True
+def pairings(i, criteria):
+	for a in i:
+		for b in i:
+			if a is not b:
+				yield (a, b)
+	#permutations = [set((a, b) for a in i if criteria(a, b)) for b in i]
+	#return reduce(set.union, permutations)
+
 class DuplicatePools(object):
 	def __init__(self, items):
 		self.pools = [set(items)]
@@ -36,8 +45,9 @@ class DuplicatePools(object):
 			return None
 		
 		items = list(self.items())
-		results = pool_map(func_safe, items)
-		return dict(zip(items, results))
+		results = pool_map(func_safe, items, parallel=False)
+		return dict(zip(items, list(results)))
+		return d
 
 	def check_if_done(self):
 		if len(self) <= 1:
@@ -47,9 +57,10 @@ class DuplicatePools(object):
 	def expand(self, fingerprint, compare):
 		self.check_if_done()
 		fingerprints = self.fingerprint(fingerprint)
-
+		from tqdm import tqdm
 		new = {}
 		for pool in self.pools:			
+			#for item_a, item_b in tqdm(pairings(pool, ne), total=len(pool)**2):
 			for item_a, item_b in pairings(pool, ne):
 				new[item_a] = new.get(item_a, set({item_a}))
 				f_a, f_b = fingerprints[item_a], fingerprints[item_b]

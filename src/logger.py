@@ -5,9 +5,11 @@ from tqdm import tqdm
 last_line_was_progress_bar = False
 
 def log(msg):
+	print(msg)
+	return
 	global last_line_was_progress_bar
 	if last_line_was_progress_bar:
-		print('\033[F', end='')
+		#print('\033[F', end='')
 		last_line_was_progress_bar = False
 	print(msg, end=c['default'] + '\n')
 
@@ -76,8 +78,7 @@ def progress_bar(item, total=None, text_color=c['dgray'], bar_color=c['dgray']):
 		item,
 		bar_format=bar_format,
 		total=total,
-		leave=False,
-		position=0
+		leave=True
 	)
 
 def prettify_path(path):
