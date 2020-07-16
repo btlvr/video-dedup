@@ -15,13 +15,11 @@ for path in args.dirs:
 		logger.path_does_not_exist(path)
 		exit(1)
 
-all_files = set()
-for path in args.dirs:
-	if path.is_dir():
-		all_files = all_files.union(set(path.iterdir()))
-	else:
-		all_files.add(path)
+def files_in(paths):
+	for path in paths:
+		if path.is_dir():
+			yield from files_in(path.iterdir())
+		else:
+			yield path
 
-#print(all_files)
-
-videos = list(filter(Video.is_video, map(Video, all_files)))
+videos = list(filter(Video.is_video, map(Video, set(files_in(args.dirs)))))
