@@ -4,12 +4,10 @@ from tqdm import tqdm
 import sys
 from args import args
 
-hide_progress_bar_when_done = not args.keep_prog
-
 last_line_was_progress_bar = False
 
 def clear_previous_bar():
-	if not hide_progress_bar_when_done:
+	if not args.keep_prog:
 		return
 	
 	global last_line_was_progress_bar
@@ -89,7 +87,7 @@ def progress_bar(item, total=None, desc="", text_color=c['dgray'], bar_color=c['
 		item,
 		bar_format=bar_format,
 		total=total,
-		leave=not hide_progress_bar_when_done,
+		leave=not args.keep_prog,
 		desc=desc
 	)
 
