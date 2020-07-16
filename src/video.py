@@ -18,6 +18,7 @@ movie_extensions = [
 	'mpg'
 ]
 
+# decorator for caching methods/properties of objects
 class memoized(object):
 	def __init__(self, func):
 		self.func = func
@@ -87,6 +88,7 @@ class Video(File):
 		super().__init__(path)
 		self.broken = False
 
+	# get duration of vidoe with ffprobe
 	@memoized
 	def duration(self):
 		cmd = [
@@ -104,17 +106,38 @@ class Video(File):
 		except subprocess.CalledProcessError:
 			self.broken = True
 			return None
-
+		#TODO: set as broken if ffprobe command complains to STDERR?
 		return duration
 
 	def is_video(self):
 		return self.extension in movie_extensions
 
+	# capture an opencv image of the video at specified timestamp
 	def frame_at(self, seconds):
+		#TODO: avoid temporary path, make ffmpeg output image directly to STDOUT and read with cv2
+		#TODO: allow for negative timestamp values (from end)
+		#TODO: let user specify times in arguments as HH:MM:SS
+
+		# convert to HH:MM:SS format for ffmpeg (needed?)
 		timestamp = str(datetime.timedelta(0,seconds))
-		image_path = f'/tmp/.frame_{uuid.uuid4()}.bmp'
-		cmd = 'ffmpeg', '-y', '-noaccurate_seek', '-ss', timestamp, '-i', self.path, '-vframes', '1', '-q:v', '2', image_path
+
+		# temporary path for image
+		image_path = f'/tmp/.frame_{uuid.uuid4()}.bmp' # bmp used to avoid wasting time compressing
+
+		# build and invoke ffpmeg command
+		#TODO: is -noaccurate_seek helping?
+		cmd = [
+			'ffmpeg', '-y',
+			'-noaccurate_seek',
+			'-ss', timestamp,
+			'-i', self.path,
+			'-vframes', '1',
+			'-q:v', '2',
+			image_path
+		]
 		subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+		
+		# load the temporary image with cv2 and remove
 		frame = cv2.imread(image_path)
 		os.remove(image_path)
 		return frame
