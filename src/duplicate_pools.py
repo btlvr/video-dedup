@@ -46,21 +46,20 @@ class DuplicatePools(object):
 		
 		items = list(self.items())
 		results = pool_map(func_safe, items, parallel=False)
-		d = dict(zip(items, list(results)))
-		return d
+		return dict(zip(items, list(results)))
+		
 
 	def check_if_done(self):
 		if len(self) <= 1:
 			print("no duplicates found")
 			exit(0)
-		
+
 	def expand(self, fingerprint, compare):
 		self.check_if_done()
 		fingerprints = self.fingerprint(fingerprint)
-		from tqdm import tqdm
+		
 		new = {}
-		for pool in self.pools:			
-			#for item_a, item_b in tqdm(pairings(pool, ne), total=len(pool)**2):
+		for pool in self.pools:
 			for item_a, item_b in pairings(pool, ne):
 				new[item_a] = new.get(item_a, set({item_a}))
 				f_a, f_b = fingerprints[item_a], fingerprints[item_b]
@@ -69,7 +68,9 @@ class DuplicatePools(object):
 				if compare(f_a, f_b):
 					new[item_a].add(item_b)
 					new[item_a].add(item_a)
+		
 		self.pools = list(map(set, new.values()))
+		
 		self.clean()
 		self.check_if_done()
 
