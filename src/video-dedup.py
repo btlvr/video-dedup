@@ -1,5 +1,11 @@
 #! python3
 
+import signal
+def stop(signal, frame):
+	exit(0)
+
+signal.signal(signal.SIGINT, stop)
+
 import os
 import time
 import numpy
