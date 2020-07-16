@@ -46,7 +46,7 @@ class DuplicatePools(object):
 		
 		items = list(self.items())
 		results = pool_map(func_safe, items, parallel=False)
-		return dict(zip(items, list(results)))
+		d = dict(zip(items, list(results)))
 		return d
 
 	def check_if_done(self):

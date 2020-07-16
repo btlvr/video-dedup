@@ -4,14 +4,15 @@ from tqdm import tqdm
 
 last_line_was_progress_bar = False
 
+line_up = '\033[F\033[K'
+
 def log(msg):
-	print(msg)
-	return
 	global last_line_was_progress_bar
 	if last_line_was_progress_bar:
-		#print('\033[F', end='')
+		print(line_up, end='')
 		last_line_was_progress_bar = False
-	print(msg, end=c['default'] + '\n')
+
+	print(msg)
 
 def plural(num, name):
 	if num == 1:
@@ -29,7 +30,6 @@ def found_n_videos(n):
 
 def n_videos_remaining(n):
 	log(
-		
 		f'{c["green"]}{n}' +
 		f'{c["blue"]} videos remaining' +
 		f'{c["default"]}'
@@ -78,7 +78,7 @@ def progress_bar(item, total=None, text_color=c['dgray'], bar_color=c['dgray']):
 		item,
 		bar_format=bar_format,
 		total=total,
-		leave=True
+		leave=False
 	)
 
 def prettify_path(path):
