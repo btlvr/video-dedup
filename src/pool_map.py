@@ -17,5 +17,4 @@ def pool_map(func, items, desc="", parallel=True):
 	pool = Pool(None, initializer=worker_init, initargs=(func,))
 	results = pool.imap(worker, items)
 	
-	return progress_bar(results, total=len(items)-1,desc=desc)
-	#return progress_bar(results, len(items)-3)
+	return progress_bar(results, total=len(items),desc=desc)

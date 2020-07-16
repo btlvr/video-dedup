@@ -65,7 +65,10 @@ class DuplicatePools(object):
 		pbar = logger.progress_bar(None, total=total_comparisons, desc="comparing")
 
 		for pool in self.pools:
-			for item_a, item_b in pairings(pool, lt):
+			pool = list(pool)
+
+			for index_a, index_b in pairings(range(len(pool)), lt):
+				item_a, item_b = pool[index_a], pool[index_b]
 				new[item_a] = new.get(item_a, set({item_a}))
 				f_a, f_b = fingerprints[item_a], fingerprints[item_b]
 				if f_a is None or f_b is None:

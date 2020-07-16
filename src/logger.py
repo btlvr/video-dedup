@@ -3,10 +3,14 @@ from pathlib import Path
 from tqdm import tqdm
 import sys
 
+hide_progress_bar_when_done = False
+
 last_line_was_progress_bar = False
 
-
 def clear_previous_bar():
+	if not hide_progress_bar_when_done:
+		return
+	
 	global last_line_was_progress_bar
 
 	line_up = '\033[F\033[K'
@@ -84,7 +88,7 @@ def progress_bar(item, total=None, desc="", text_color=c['dgray'], bar_color=c['
 		item,
 		bar_format=bar_format,
 		total=total,
-		leave=False,
+		leave=not hide_progress_bar_when_done,
 		desc=desc
 	)
 
