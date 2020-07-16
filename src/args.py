@@ -47,6 +47,14 @@ parser.add_argument(
 	help='print the videos which will be operated on and exit'
 )
 
+parser.add_argument(
+	'--keep-prog',
+	dest='keep_prog',
+	action='store_const',
+	const=True, default=False,
+	help='don\'t clear progress bars when they reach 100%'
+)
+
 #parser.add_argument(
 #	'-e',
 #	'--exclude',

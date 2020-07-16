@@ -2,8 +2,9 @@ from colors import colors as c
 from pathlib import Path
 from tqdm import tqdm
 import sys
+from args import args
 
-hide_progress_bar_when_done = False
+hide_progress_bar_when_done = not args.keep_prog
 
 last_line_was_progress_bar = False
 
