@@ -20,7 +20,7 @@ def clear_previous_bar():
 
 def log(msg):
 	clear_previous_bar()
-	print(msg)
+	print(msg + c["default"])
 
 def plural(num, name):
 	if num == 1:
@@ -32,15 +32,13 @@ def found_n_videos(n):
 	log(
 		f'{c["blue"]}found ' +
 		f'{c["green"]}{n}' +
-		f'{c["blue"]} videos' +
-		f'{c["default"]}'
+		f'{c["blue"]} videos'
 	)
 
 def n_videos_remaining(n):
 	log(
 		f'{c["green"]}{n}' +
-		f'{c["blue"]} videos remaining' +
-		f'{c["default"]}'
+		f'{c["blue"]} videos remaining'
 	)
 
 def excluding_by_duration(n):
@@ -48,27 +46,25 @@ def excluding_by_duration(n):
 		f'{c["magenta"]}' +
 		f'excluding videos with durations that differ by more than ' +
 		f'{c["yellow"]}{n}' +
-		f'{c["magenta"]} {plural(n, "second")}' +
-		f'{c["default"]}'
+		f'{c["magenta"]} {plural(n, "second")}'
 	)
 
 def warn_no_duration_threshold():
 	log(
 		f'{c["yellow"]}It\'s probably a good idea to use ' +
 		f'{c["green"]}--duration-threshold' +
-		f'{c["yellow"]}.{c["default"]}'
+		f'{c["yellow"]}.'
 	)
 
 def comparing_hashes_at(n):
 	log(
 		f'{c["magenta"]}comparing hashes at ' +
 		f'{c["yellow"]}{n}' +
-		f'{c["magenta"]}s' +
-		f'{c["default"]}'
+		f'{c["magenta"]}s'
 	)
 
 def hbar(n=10):
-	log(f'{c["dgray"]}{"-"*n}{c["default"]}')
+	log(f'{c["dgray"]}{"-"*n}')
 
 def path_does_not_exist(path):
 	log(f'{c["red"]}error: supplied path {prettify_path(path)}{c["red"]} does not exist')
