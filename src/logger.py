@@ -23,10 +23,7 @@ def log(msg):
 	print(msg + c["default"])
 
 def plural(num, name):
-	if num == 1:
-		return name
-	else:
-		return name+'s'
+	return name if num == 1 else name+'s'
 
 def found_n_videos(n):
 	log(
