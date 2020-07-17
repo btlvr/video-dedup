@@ -7,7 +7,7 @@ from args import args
 last_line_was_progress_bar = False
 
 def clear_previous_bar():
-	if not args.keep_prog:
+	if args.keep_prog:
 		return
 	
 	global last_line_was_progress_bar
@@ -87,7 +87,7 @@ def progress_bar(item, total=None, desc="", text_color=c['dgray'], bar_color=c['
 		item,
 		bar_format=bar_format,
 		total=total,
-		leave=not args.keep_prog,
+		leave=args.keep_prog,
 		desc=desc
 	)
 

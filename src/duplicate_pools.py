@@ -5,7 +5,6 @@ from functools import *
 from contextlib import suppress
 from collections import defaultdict
 from pool_map import pool_map
-from tqdm import tqdm
 
 # yield all (a, b) pairs in i, such that criteria(a, b) == True
 def pairings(i, criteria):
