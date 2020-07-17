@@ -88,7 +88,8 @@ def progress_bar(item, total=None, desc="", text_color=c['dgray'], bar_color=c['
 		bar_format=bar_format,
 		total=total,
 		leave=args.keep_prog,
-		desc=desc
+		desc=desc,
+		dynamic_ncols=True
 	)
 
 def prettify_path(path):
